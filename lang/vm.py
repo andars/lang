@@ -1,3 +1,5 @@
+class VMException(Exception):
+    pass
 
 class VM():
 	def __init__(self, code):
@@ -32,7 +34,7 @@ class VM():
 	def rjmp(self, arg):
 		self.ip += int(arg[0])
 		if self.ip < 0 or self.ip > len(self.code):
-			raise Error
+			raise VMException("invalid instruction pointer after rjmp")
 
 	def jmp(self, arg):
 		print("jumping to {0}".format(int(arg[0])))
@@ -78,7 +80,7 @@ class VM():
 	def push(self,arg):
 		val = arg[0]
 		if val[0] == '#':
-			self.stack.append(self.scope[val[1:]] if val[1:] in self.scope else None)
+            self.get(arg)
 		elif VM.is_number(arg[0]):
 			self.stack.append(float(arg[0]))
 
