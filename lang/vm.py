@@ -40,7 +40,7 @@ class VM():
 		print("jumping to {0}".format(int(arg[0])))
 		self.ip = int(arg[0])
 		if self.ip < 0 or self.ip > len(self.code):
-			raise Error
+			raise VMException("invalid jmp address")
 	
 	def jmpne(self,arg):
 		a = self.stack.pop()
