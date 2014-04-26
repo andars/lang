@@ -1,0 +1,18 @@
+push 8
+push 4
+mul
+set #hello
+push #hello
+push 10
+mul
+push 1
+set #counter
+push #counter
+push 1
+add
+set #counter
+push #counter
+push 10
+jmpne 9
+
+print hello there
