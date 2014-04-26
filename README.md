@@ -1,9 +1,8 @@
 #LANG
-The "**L**ANG **A**mateur **N**ano **G**allery"
 
 ##What is this?
 
-This is a playground for tinkering with lexers, parsers, virtual machines, etc. It began as a virtual machine that ran a bytecode-language with 3 instructions. Several more have been added, bringing the total for the virtual machine up to 10 (See *VM*).
+This is a playground for tinkering with and learning about lexers, parsers, virtual machines, etc. It began as a virtual machine that ran a bytecode-language with 3 instructions. Several more have been added, bringing the total for the virtual machine up to 10 (See *VM*).
 
 The project draws inspiration from @charliesome's twostroke javascript implementation among others.
 
@@ -52,3 +51,8 @@ The virtual machine is stack-based and currently has 10 instructions that operat
     Conditional Jump - Sets IP to given address if top 2 values on the stack are not equal
     
     
+##Parser, Lexer, and AST
+todo
+
+##Contributing
+If you know nothing about language design and implementation, it is likely you know more than me, so any contributions, whether code, advice, or anything else, are more than welcome.
