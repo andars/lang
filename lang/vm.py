@@ -82,6 +82,12 @@ class VM():
 		elif VM.is_number(arg[0]):
 			self.stack.append(float(arg[0]))
 
+	def print(self, arg):
+		val = arg[0]
+		if val[0] == '"':
+			print(val)
+		else:
+			print(self.scope[val])
 	# HELPERS
 	@staticmethod
 	def is_number(val):
