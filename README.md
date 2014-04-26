@@ -52,6 +52,10 @@ The virtual machine is stack-based and currently has 10 instructions that operat
     
     
 ##Parser, Lexer, and AST
+- Single line comments begin with a hash (e.g. `#blah blah`)
+- Multi line comments begin with `/#` and end with `#/`
+
+
 todo
 
 ##Contributing

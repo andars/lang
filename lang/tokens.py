@@ -10,7 +10,7 @@ token_expressions = [
 	(r'[+]', 'PLUS'),
 	(r'[-]', 'MINUS'),
 	(r'var', 'DECLARATION'),
-	(r'perhaps', 'IF'),
+	(r'perhaps', 'IF'), #such class
 	(r'[1-9][0-9]*', 'INTEGER'),
 	(r'[a-z]+', 'SYMBOL')
 ]
