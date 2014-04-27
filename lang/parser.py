@@ -1,21 +1,33 @@
 import lang.ast as ast
+class ParseException(Exception):
+	pass
 
+op_info = {
+	'PLUS': [1, 'LEFT'],
+	'MINUS': [1, 'LEFT'],
+	'MULT': [2, 'LEFT'],
+	'DIV': [2, 'LEFT'],
+	'CARET': [3, 'RIGHT']
+}
 class Parser():
 	def __init__(self, lexer):
 		self.lexer = lexer
 		self.statements = []
 		self.peeked = None
 
+	#general parsing utility functions
 	def expect(self, types):
 		self.next_token()
+		if not isinstance(types, list):
+			types = [types]
 		if not self.token().type in types:
 			self.error("unexpected type: "+self.token().type)
 
 	def token(self):
 		return self.current or self.error()
+
 	def error(self, msg):
-		print("ERROR: " + msg)
-		raise Exception
+		raise ParseException(msg)
 
 	def next_token(self):
 		self.current = self.peeked or self.lexer.next_token()
@@ -31,8 +43,10 @@ class Parser():
 		if not self.peeked:
 			self.peeked = self.lexer.next_token()
 		if not self.peeked:
-			raise Error
+			self.error("no next token?!?!")
 		return self.peeked
+
+	#save and load allow for more extensive lookahead when necessary
 	def save(self):
 		return [self.current, self.peeked, self.lexer.save()]
 
@@ -48,47 +62,47 @@ class Parser():
 
 	def expression(self):
 		print("looking for expression")
-		expr = self.add_sub_expr()
-		print("found expr" + str(expr))
-		return expr
+		return self.expr(1)
+
+	def expr(self, prec):
+		lhs = self.atom()
+		while 1:
+			if not self.try_peek_token():
+				break
+			current = self.peek_token()
+			if not (current.type in op_info.keys()):
+				break
+			[op_prec, op_assoc] = op_info[current.type]
+			if op_prec < prec:
+				break
+			self.next_token()
+			next_prec = op_prec+1 if op_assoc == 'LEFT' else op_prec
+			rhs = self.expr(next_prec)
+			lhs = self.op(current, lhs, rhs)
+		return lhs
 	
-	def add_sub_expr(self):
+	def atom(self):
+		peek_type = self.peek_token().type
+		if peek_type == 'LPAREN':
+			self.expect('LPAREN')
+			expr = self.expr(1)
+			self.expect('RPAREN')
+			return expr
+		elif peek_type == 'INTEGER':
+			self.expect('INTEGER')
+			return ast.Number(value=self.token().value)
+		elif peek_type == 'SYMBOL':
+			self.expect('SYMBOL')
+			return ast.Symbol(name=self.token().value)
+		else:
+			self.error("unrecognized atom in expression")
+	
+	def op(self, op, lhs, rhs):
 		nodes = {
 			'PLUS': ast.Addition,
-			'MINUS': ast.Subtraction
-		}
-		expr = self.mult_div_expr()
-		print("found lhs: "+str(expr))
-		
-		while self.try_peek_token() and self.peek_token().type in nodes.keys():
-			print('looking for plus')
-			expr = nodes[self.next_token().type](left=expr, right=self.mult_div_expr())
-		return expr
-
-	def mult_div_expr(self):
-		nodes  = {
+			'MINUS': ast.Subtraction,
 			'MULT': ast.Multiplication,
 			'DIV': ast.Division
 		}
-		expr = self.value_expr()
-		while self.try_peek_token() and self.peek_token().type in nodes.keys():
-			expr = nodes[self.next_token().type](left=expr, right=self.value_expr())
-		return expr
-
-	
-	def value_expr(self):
-		peek_type = self.peek_token().type
-		if peek_type == 'INTEGER':
-			self.expect('INTEGER')
-			return ast.Number(value=self.token().value)
-		elif peek_type == 'LPAREN':
-			self.expect('LPAREN')
-			expr = self.expression()	
-			self.expect('RPAREN')
-			return expr
-		elif peek_type == 'SYMBOL':
-			self.expect('SYMBOL')
-			return ast.Symbol(name=self.token().value) 
-		else:
-			self.error()
+		return nodes[op.type](left = lhs, right = rhs)
 
