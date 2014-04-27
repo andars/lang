@@ -1,6 +1,6 @@
 import lang.ast as ast
 
-class Parser():
+class AlternativeParser():
 	def __init__(self, lexer):
 		self.lexer = lexer
 		self.statements = []

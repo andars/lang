@@ -80,7 +80,7 @@ class VM():
 	def push(self,arg):
 		val = arg[0]
 		if val[0] == '#':
-            self.get(arg)
+			self.get(arg)
 		elif VM.is_number(arg[0]):
 			self.stack.append(float(arg[0]))
 
