@@ -8,4 +8,3 @@ class Base():
 		for k,i in vars(self).items():
 			if isinstance(i, Base):
 				i.pprint(indent+2)
-

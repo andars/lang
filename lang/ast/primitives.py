@@ -4,6 +4,7 @@ class Primitive(Base):
 		super().__init__(**kwargs)
 	def walk(self):
 		print(str(self) + " with value: " + str(self.value))
-
+	def s(self):
+		return str(self.value)
 class Number(Primitive):
 	pass

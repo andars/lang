@@ -7,10 +7,17 @@ class BinaryOperator(Base):
 		self.left.walk()
 		self.right.walk()
 class Addition(BinaryOperator):
-	pass
+	def s(self):
+		return "(+ " + self.left.s() + " " + self.right.s() + " )"
+	
 class Subtraction(BinaryOperator):
-	pass
+	def s(self):
+		return "(- " + self.left.s() + " " + self.right.s() + " )"
+	
 class Multiplication(BinaryOperator):
-	pass
+	def s(self):
+		return "(* " + self.left.s() + " " + self.right.s() + " )"
+
 class Division(BinaryOperator):
-	pass
+	def s(self):
+		return "(/ " + self.left.s() + " " + self.right.s() + " )"
